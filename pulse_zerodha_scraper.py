@@ -23,6 +23,8 @@ import time
 from datetime import datetime
 import logging
 import re
+import tempfile
+import shutil
 
 logging.basicConfig(
     level=logging.INFO,
@@ -40,6 +42,7 @@ class PulseZerodhaScraper:
         self.headless = headless
         self.driver = None
         self.wait = None
+        self._profile_dir = None
     
     def _init_driver(self):
         """Initialize web driver"""
@@ -54,13 +57,22 @@ class PulseZerodhaScraper:
             options.add_argument('--disable-dev-shm-usage')
             options.add_argument('--disable-setuid-sandbox')
             options.add_argument('--remote-debugging-port=9222')
+            options.add_argument('--no-zygote')
+            options.add_argument('--disable-extensions')
+            options.add_argument('--disable-background-networking')
+            options.add_argument('--disable-software-rasterizer')
+            options.add_argument('--disable-features=VizDisplayCompositor')
+
+            # Use a unique user-data-dir per run to avoid profile locking/corruption in containers
+            self._profile_dir = tempfile.mkdtemp(prefix="chrome-profile-")
+            options.add_argument(f'--user-data-dir={self._profile_dir}')
             
             # Anti-bot detection
             options.add_argument('--disable-blink-features=AutomationControlled')
             options.add_experimental_option("excludeSwitches", ["enable-automation"])
             options.add_experimental_option('useAutomationExtension', False)
             options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
-            options.add_argument('--window-size=1920,1080')
+            options.add_argument('--window-size=1280,720')
 
             # Use Selenium Manager (built into Selenium 4) to resolve the correct chromedriver.
             # This avoids webdriver-manager extraction/exec issues in containers.
@@ -570,6 +582,12 @@ class PulseZerodhaScraper:
                 logger.info("Browser closed")
             except:
                 pass
+        if self._profile_dir:
+            try:
+                shutil.rmtree(self._profile_dir, ignore_errors=True)
+            except:
+                pass
+            self._profile_dir = None
 
 
 def main():

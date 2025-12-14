@@ -22,6 +22,7 @@ from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 import json
 from typing import Dict, Any
+import os
 
 # Import scraper classes
 from grownews import GrowwStockNewsScraper
@@ -51,7 +52,10 @@ app.add_middleware(
 )
 
 # Thread pool for running scrapers
-executor = ThreadPoolExecutor(max_workers=2)
+SCRAPE_PARALLEL = os.getenv("SCRAPE_PARALLEL", "0").strip().lower() in {"1", "true", "yes", "y"}
+# Railway free tier often can't support 2 concurrent headless Chromes reliably.
+# Default to sequential (1 worker). Set SCRAPE_PARALLEL=1 to opt into parallel.
+executor = ThreadPoolExecutor(max_workers=2 if SCRAPE_PARALLEL else 1)
 
 
 @app.on_event("startup")
