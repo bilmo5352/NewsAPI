@@ -3,12 +3,12 @@
 ## ✅ Container Configuration
 
 ### Dockerfile
-- ✅ Python 3.10 slim base image
-- ✅ All Chrome dependencies installed
-- ✅ Modern GPG key management (Debian Trixie compatible)
+- ✅ Python 3.10 slim-bullseye (stable Debian)
+- ✅ Chrome installed with dependencies
+- ✅ Modern GPG key management
 - ✅ Proper environment variables (DISPLAY, CHROME_BIN)
 - ✅ Health check configured
-- ✅ Port environment variable handled (${PORT:-8000})
+- ✅ Startup script handles PORT variable correctly
 
 ### Chrome Configuration  
 Both scrapers (grownews.py & pulse_zerodha_scraper.py):

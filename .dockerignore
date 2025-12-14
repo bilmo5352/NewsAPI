@@ -11,3 +11,6 @@ docker-compose.yml
 .dockerignore
 venv/
 ENV/
+
+# Keep start script
+!start.sh
