@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Output files
+*.json
+*.png
+*.log
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+README*.md
+pulse_zerodha_analysis.md
+
+# Test files
+test_*.py
+
+# Batch files
+*.bat
+
+# Docker
+.dockerignore
+Dockerfile
+docker-compose.yml
+
