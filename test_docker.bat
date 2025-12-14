@@ -6,12 +6,14 @@ echo.
 echo This will build and test your Docker container locally
 echo Make sure Docker Desktop is running!
 echo.
+echo NOTE: First build takes 5-10 minutes (downloading Chrome)
+echo.
 pause
 
 echo.
-echo Step 1: Building Docker image...
+echo Step 1: Building Docker image (this may take several minutes)...
 echo ================================================================================
-docker build -t news-api-test .
+docker build --progress=plain -t news-api-test .
 
 if errorlevel 1 (
     echo.
