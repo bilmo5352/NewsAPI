@@ -54,6 +54,20 @@ app.add_middleware(
 executor = ThreadPoolExecutor(max_workers=2)
 
 
+@app.on_event("startup")
+async def startup_event():
+    """Log startup information"""
+    import os
+    logger.info("=" * 80)
+    logger.info("NEWS AGGREGATOR API - STARTING")
+    logger.info("=" * 80)
+    logger.info(f"Port: {os.getenv('PORT', '8000')}")
+    logger.info(f"Chrome Binary: {os.getenv('CHROME_BIN', 'Not set')}")
+    logger.info(f"Python version: {__import__('sys').version}")
+    logger.info("Application started successfully!")
+    logger.info("=" * 80)
+
+
 def run_groww_scraper() -> Dict[str, Any]:
     """
     Run Groww scraper in headless mode

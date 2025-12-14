@@ -1,55 +1,25 @@
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
 *.so
 .Python
-env/
 venv/
 ENV/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
 *.egg-info/
-.installed.cfg
-*.egg
 
-# Virtual environments
-venv/
-ENV/
-env/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# Output files
+*.json
+*.png
+*.log
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Output files - Generated JSON and screenshots
-*.json
-*.png
-*.log
+# IDE
+.vscode/
+.idea/
 
-# Exclude test outputs but keep configuration
+# Keep config files
 !requirements.txt
 !railway.json
-!package*.json
-
-# Local test files
-test_local.py
-debug_*.py
-

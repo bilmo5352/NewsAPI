@@ -1,161 +1,76 @@
-# 📰 News Aggregator API
+# News Aggregator API
 
-A FastAPI-based REST API that scrapes financial news from multiple Indian sources (Groww and Pulse by Zerodha) in parallel and returns combined results.
+FastAPI-based REST API that scrapes financial news from Groww and Pulse by Zerodha in parallel.
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new)
+## Features
 
-## ✨ Features
+- Parallel scraping from multiple sources
+- RESTful API with automatic OpenAPI documentation
+- Docker containerized with Chrome/ChromeDriver
+- Ready for Railway deployment
+- Headless browser execution
+- ~4 minute response time for full aggregation
 
-- 🚀 **Parallel Scraping** - Runs multiple scrapers simultaneously
-- 📊 **Multi-Source** - Aggregates news from Groww and Pulse by Zerodha
-- 🔄 **RESTful API** - Clean JSON responses
-- 📚 **Auto Documentation** - Interactive Swagger UI
-- 🐳 **Docker Ready** - Easy deployment with Docker
-- ☁️ **Railway Deploy** - One-click deployment to Railway
-- 🔍 **Selenium-based** - Reliable web scraping with Selenium
-- ⚡ **Fast Response** - ~4 minutes for full aggregation
+## Data Sources
 
-## 📋 What It Scrapes
+**Groww** - Stock news, company headlines, price changes  
+**Pulse** - Market articles, summaries, publication sources
 
-### Groww (groww.in)
-- Stock-specific news
-- Company headlines
-- Stock price changes
-- News source and timestamp
+## Quick Start
 
-### Pulse by Zerodha (pulse.zerodha.com)
-- Market news articles
-- Article summaries
-- Source publications
-- Relative timestamps
-- Article URLs
+### Local Development
 
-## 🚀 Quick Start
-
-### Option 1: Railway Deployment (Fastest - 5 minutes)
-
-1. **Read the Quick Start Guide**
-   ```bash
-   # Open QUICKSTART.md for step-by-step instructions
-   ```
-
-2. **Deploy to Railway**
-   - Push code to GitHub
-   - Connect to Railway
-   - Automated deployment
-   - Get your live URL
-
-   📖 **Full guide**: See [QUICKSTART.md](QUICKSTART.md) and [RAILWAY_DEPLOYMENT.md](RAILWAY_DEPLOYMENT.md)
-
-### Option 2: Local Development
-
-1. **Install Dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-2. **Run the API**
-   ```bash
-   python news_api.py
-   ```
-
-3. **Test It**
-   ```bash
-   # In another terminal
-   python test_api.py
-   ```
-
-   API will be available at: http://localhost:8000
-
-### Option 3: Docker (Local Testing)
-
-1. **Build and Run**
-   ```bash
-   # Windows
-   test_docker.bat
-
-   # Or manually
-   docker-compose up -d
-   ```
-
-2. **Access API**
-   - URL: http://localhost:8000
-   - Docs: http://localhost:8000/docs
-
-## 📖 API Documentation
-
-### Endpoints
-
-| Endpoint | Method | Description | Time |
-|----------|--------|-------------|------|
-| `/` | GET | API information | < 1s |
-| `/health` | GET | Health check | < 1s |
-| `/docs` | GET | Interactive Swagger UI | < 1s |
-| `/scrape` | GET | **Scrape both sources** | ~4 min |
-| `/scrape/groww` | GET | Scrape Groww only | ~4 min |
-| `/scrape/pulse` | GET | Scrape Pulse only | ~1 min |
-
-### Example Usage
-
-**Health Check**
 ```bash
-curl https://your-app.railway.app/health
+# Install dependencies
+pip install -r requirements.txt
+
+# Run API
+python news_api.py
+
+# Access at http://localhost:8000
+# Docs at http://localhost:8000/docs
 ```
 
-Response:
-```json
-{
-  "status": "healthy",
-  "timestamp": "2025-12-14T20:30:00.123456"
-}
+### Docker
+
+```bash
+docker-compose up -d
 ```
 
-**Scrape All Sources**
+### Railway Deployment
+
+1. Push code to GitHub
+2. Create new project on [Railway](https://railway.app/)
+3. Connect GitHub repository
+4. Railway auto-detects Dockerfile and deploys
+5. Generate domain in settings
+
+## API Endpoints
+
+| Endpoint | Description | Response Time |
+|----------|-------------|---------------|
+| `GET /` | API information | < 1s |
+| `GET /health` | Health check | < 1s |
+| `GET /docs` | Swagger documentation | < 1s |
+| `GET /scrape` | Scrape both sources (parallel) | ~4 min |
+| `GET /scrape/groww` | Groww only | ~4 min |
+| `GET /scrape/pulse` | Pulse only | ~1 min |
+
+### Example
+
 ```bash
 curl https://your-app.railway.app/scrape
 ```
 
-Response:
 ```json
 {
   "success": true,
-  "timestamp": "2025-12-14T20:35:00.123456",
   "duration_seconds": 245.67,
   "sources": {
-    "groww": {
-      "success": true,
-      "data": {
-        "total_news_items": 9,
-        "news_items": [
-          {
-            "headline": "Godrej Properties sells homes...",
-            "stock_name": "Godrej Properties",
-            "stock_change": "1.94%",
-            "source": "Business Standard",
-            "time": "4 hours ago"
-          }
-        ]
-      }
-    },
-    "pulse": {
-      "success": true,
-      "data": {
-        "total_articles": 26,
-        "articles": [
-          {
-            "headline": "Enforcement Directorate aims...",
-            "content": "The criminal sections-loaded...",
-            "source": "The Hindu Business",
-            "time": "55 minutes ago",
-            "article_url": "https://..."
-          }
-        ]
-      }
-    }
+    "groww": { "success": true, "data": {...} },
+    "pulse": { "success": true, "data": {...} }
   },
   "summary": {
-    "total_groww_items": 9,
-    "total_pulse_articles": 26,
     "total_items": 35
   }
 }
