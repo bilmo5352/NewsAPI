@@ -99,3 +99,4 @@ curl http://localhost:8000/health
 - Free tier: 500 hours/month
 - Pro tier recommended for production ($5/month)
 
+

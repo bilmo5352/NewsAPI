@@ -25,7 +25,7 @@ from typing import Dict, Any
 import os
 
 # Import scraper classes
-from grownews import GrowwStockNewsScraper
+from groww_scraper_fixed import GrowwScraperFixed
 from pulse_zerodha_scraper import PulseZerodhaScraper
 
 # Configure logging
@@ -81,39 +81,31 @@ def run_groww_scraper() -> Dict[str, Any]:
     """
     try:
         logger.info("Starting Groww scraper...")
-        scraper = GrowwStockNewsScraper(headless=True)
+        scraper = GrowwScraperFixed(headless=True)
         
-        # Initialize driver
-        if not scraper._init_driver():
-            logger.error("Failed to initialize Groww driver")
-            return {
-                'error': 'Failed to initialize browser',
-                'source': 'groww',
-                'timestamp': datetime.now().isoformat()
+        # Scrape all data (includes setup, load, and cleanup)
+        data = scraper.scrape_all()
+        
+        # Check if we got data
+        if data and data.get('news'):
+            logger.info(f"Groww scraper completed: {len(data['news'])} news items")
+            
+            # Format to match expected API response structure
+            formatted_data = {
+                'scraped_at': data.get('metadata', {}).get('scraped_at'),
+                'url': data.get('metadata', {}).get('url'),
+                'news_items': data.get('news', []),  # Map 'news' to 'news_items' for compatibility
+                'indices': data.get('indices', []),
+                'top_gainers': data.get('top_gainers', []),
+                'top_losers': data.get('top_losers', []),
+                'most_bought': data.get('most_bought', []),
+                'most_traded': data.get('most_traded', [])
             }
-        
-        # Navigate to page
-        if not scraper.navigate_to_page():
-            logger.error("Failed to load Groww page")
-            scraper.cleanup()
-            return {
-                'error': 'Failed to load page',
-                'source': 'groww',
-                'timestamp': datetime.now().isoformat()
-            }
-        
-        # Scrape news
-        news_data = scraper.scrape_all_news()
-        
-        # Cleanup
-        scraper.cleanup()
-        
-        if news_data and news_data.get('news_items'):
-            logger.info(f"Groww scraper completed: {len(news_data['news_items'])} items")
+            
             return {
                 'success': True,
                 'source': 'groww',
-                'data': news_data
+                'data': formatted_data
             }
         else:
             logger.warning("Groww scraper returned no items")

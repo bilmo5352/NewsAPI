@@ -1,10 +1,1 @@
-# Web scraping dependencies
-selenium==4.15.2
-
-# API dependencies
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
-python-multipart==0.0.6
-
-# Utilities
-requests==2.31.0
+selenium>=4.15.0
